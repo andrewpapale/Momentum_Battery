@@ -1,0 +1,996 @@
+﻿2021-02-23 AndyP
+MCQ-30 Discounting Test
+
+
+
+<defaults>
+/ canvasaspectratio = (4,3)
+/ minimumversion = "6.0.0.0"
+/ inputdevice = mouse
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ txbgcolor = white
+/ txcolor = (0, 0, 0)
+</defaults>
+
+
+<values>
+/ currenttotal = 0;
+/ SS = 0;
+/ LL = 0;
+/ days = 0;
+/ trial = 0;
+/ payment = 0;
+/ paydate = 0;
+/ randnum = 0;
+/ zero = 0;
+/ yindex = null;
+/ timeslistitem = null;
+/ choiceslistitem = null;
+</values>
+
+<parameters>
+</parameters>
+
+
+<data>
+/ columns = (build, computer.platform, computer.touch, date, time, subject, group, script.sessionid, blockcode, blocknum, 
+trialcode,values.trial,values.SS,values.LL,values.days,response,latency,values.currenttotal,values.paydate,values.payment,values.choiceslistitem,values.timeslistitem)
+</data>
+
+<list choices>
+</list>
+
+<list times>
+</list>
+
+<text next>
+/ items = ("Next")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (50%, 75%)
+/ size = (25%, 15%)
+/ vjustify = center
+/ txbgcolor = gainsboro
+/ txcolor = black
+</text>
+
+<text instructions1>
+/ items = ("For each of the next 30 choices, please indicate which reward you would prefer: 
+the smaller reward today, or the larger reward in the specified number of days.")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 238)
+/ position = (50%, 50%)
+</text>
+
+<text instructions2>
+/ items = ("Please take the choices seriously: they are for REAL MONEY.  
+
+At the end of the session, one of the 30 questions will be selected 
+at random and you will get the reward that you chose on that question.  
+
+If you choose the smaller reward, you will get paid before you leave today. 
+
+If you choose the delayed reward, you will get paid in the specified number 
+of days and not before.")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 238)
+/ position = (50%, 45%)
+/ vjustify = center
+/ hjustify = left
+</text>
+
+<text instructions3>
+/ items = ("So to make sure that you get a reward you prefer, 
+you should answer every question as though it were the one you will win.")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 238)
+/ position = (50%, 50%)
+/ vjustify = center
+/ hjustify = left
+</text>
+
+
+<text instructions4>
+/ items = ("Please click on ONE of each TWO choices for the following 30 questions:")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 238)
+/ vjustify = center
+/ hjustify = left
+/ position = (50%, 60%)
+</text>
+
+<text SS>
+/ items = ("...$<% values.SS %> today")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (25%, 50%)
+/ size = (25%, 15%)
+/ vjustify = center
+/ txbgcolor = beige
+/ txcolor = black
+</text>
+
+<text or>
+/ items = ("or")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (50%, 50%)
+/ size = (25%, 15%)
+/ vjustify = center
+/ txcolor = black
+</text>
+
+
+<text LL>
+/ items = ("$<% values.LL %> in <% values.days %> days?")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (75%, 50%)
+/ size = (25%, 15%)
+/ vjustify = center
+/ txbgcolor = beige
+/ txcolor = black
+</text>
+
+<text wouldyouprefer>
+/ items = ("Would you prefer...")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (50%, 25%)
+/ size = (35%, 25%)
+/ vjustify = center
+/ txcolor = black
+</text>
+
+<text whatdidyouthink>
+/ items = ("What did you think about this procedure?")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (50%, 25%)
+/ size = (35%, 25%)
+/ vjustify = center
+/ txcolor = black
+</text>
+
+
+<text Boring>
+/ items = ("Boring")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (10%, 50%)
+/ size = (25%, 15%)
+/ vjustify = center
+/ txcolor = black
+</text>
+
+<text Interesting>
+/ items = ("Interesting")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (95%, 50%)
+/ size = (25%, 15%)
+/ vjustify = center
+/ txcolor = black
+</text>
+
+<text Dull>
+/ items = ("Dull")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (10%, 50%)
+/ size = (25%, 15%)
+/ vjustify = center
+/ txcolor = black
+</text>
+
+<text Exciting>
+/ items = ("Exciting")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (95%, 50%)
+/ size = (25%, 15%)
+/ vjustify = center
+/ txcolor = black
+</text>
+
+<text One>
+/ items = ("1")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (20%, 50%)
+/ size = (6%, 6%)
+/ vjustify = center
+/ txbgcolor = beige
+/ txcolor = black
+</text>
+
+<text Two>
+/ items = ("2")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (30%, 50%)
+/ size = (6%, 6%)
+/ vjustify = center
+/ txbgcolor = beige
+/ txcolor = black
+</text>
+
+<text Three>
+/ items = ("3")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (40%, 50%)
+/ size = (6%, 6%)
+/ vjustify = center
+/ txbgcolor = beige
+/ txcolor = black
+</text>
+
+<text Four>
+/ items = ("4")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (50%, 50%)
+/ size = (6%, 6%)
+/ vjustify = center
+/ txbgcolor = beige
+/ txcolor = black
+</text>
+
+<text Five>
+/ items = ("5")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (60%, 50%)
+/ size = (6%, 6%)
+/ vjustify = center
+/ txbgcolor = beige
+/ txcolor = black
+</text>
+
+<text Six>
+/ items = ("6")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (70%, 50%)
+/ size = (6%, 6%)
+/ vjustify = center
+/ txbgcolor = beige
+/ txcolor = black
+</text>
+
+<text Seven>
+/ items = ("7")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (80%, 50%)
+/ size = (6%, 6%)
+/ vjustify = center
+/ txbgcolor = beige
+/ txcolor = black
+</text>
+
+<text payment>
+/ items = ("You will be paid $<%values.payment%> in <%values.paydate%> days")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ position = (50%, 50%)
+/ size = (25%, 15%)
+/ vjustify = center
+/ txcolor = black
+</text>
+
+<block instructions> 
+/ trials = [1=instructions1, instructions2, instructions3]
+</block>
+
+<trial instructions1>
+/ stimulusframes = [1=instructions1, next]
+/ validresponse = (next)
+</trial>
+
+
+<trial instructions2>
+/ stimulusframes = [1=instructions2, next]
+/ validresponse = (next)
+</trial>
+
+<trial instructions3>
+/ stimulusframes = [1=instructions3, instructions4, next]
+/ validresponse = (next)
+</trial>
+
+
+
+<block questions>
+/ trials = [
+	1=Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16,Q17,Q18,Q19,Q20,Q21,Q22,Q23,Q24,Q25,Q26,Q27,Q28,Q29,Q30
+]
+</block>
+
+<trial Q1>
+/ ontrialbegin = [
+	values.SS = 54;
+	values.LL = 55;
+	values.days = 117;	
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q1.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q1.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+<trial Q2>
+/ ontrialbegin = [
+	values.SS = 55;
+	values.LL = 75;
+	values.days = 61;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q2.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q2.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+<trial Q3>
+/ ontrialbegin = [
+	values.SS = 19;
+	values.LL = 25;
+	values.days = 53;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q3.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q3.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+<trial Q4>
+/ ontrialbegin = [
+	values.SS = 84.50;
+	values.LL = 85;
+	values.days = 155;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q4.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q4.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+<trial Q5>
+/ ontrialbegin = [
+	values.SS = 14;
+	values.LL = 25;
+	values.days = 19;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q5.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q5.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q6>
+/ ontrialbegin = [
+	values.SS = 47;
+	values.LL = 50;
+	values.days = 160;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q6.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q6.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q7>
+/ ontrialbegin = [
+	values.SS = 15;
+	values.LL = 35;
+	values.days = 13;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q7.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q7.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q8>
+/ ontrialbegin = [
+	values.SS = 25;
+	values.LL = 60;
+	values.days = 14;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q8.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q8.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q9>
+/ ontrialbegin = [
+	values.SS = 78;
+	values.LL = 80;
+	values.days = 162;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q9.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q9.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q10>
+/ ontrialbegin = [
+	values.SS = 40;
+	values.LL = 55;
+	values.days = 62;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q10.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q10.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q11>
+/ ontrialbegin = [
+	values.SS = 34.75;
+	values.LL = 35;
+	values.days = 186;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q11.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q11.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q12>
+/ ontrialbegin = [
+	values.SS = 67;
+	values.LL = 75;
+	values.days = 119;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q12.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q12.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q13>
+/ ontrialbegin = [
+	values.SS = 34;
+	values.LL = 35;
+	values.days = 186;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q13.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q13.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q14>
+/ ontrialbegin = [
+	values.SS = 27;
+	values.LL = 50;
+	values.days = 21;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q14.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q14.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q15>
+/ ontrialbegin = [
+	values.SS = 69;
+	values.LL = 85;
+	values.days = 91;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q15.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q15.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q16>
+/ ontrialbegin = [
+	values.SS = 49;
+	values.LL = 60;
+	values.days = 89;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q16.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q16.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q17>
+/ ontrialbegin = [
+	values.SS = 80;
+	values.LL = 85;
+	values.days = 157;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q17.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q17.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q18>
+/ ontrialbegin = [
+	values.SS = 24;
+	values.LL = 35;
+	values.days = 29;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q18.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q18.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q19>
+/ ontrialbegin = [
+	values.SS = 33;
+	values.LL = 80;
+	values.days = 14;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q19.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q19.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q20>
+/ ontrialbegin = [
+	values.SS = 28;
+	values.LL = 30;
+	values.days = 179;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q20.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q20.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q21>
+/ ontrialbegin = [
+	values.SS = 34;
+	values.LL = 50;
+	values.days = 30;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q21.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q21.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q22>
+/ ontrialbegin = [
+	values.SS = 25;
+	values.LL = 30;
+	values.days = 80;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q22.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q22.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q23>
+/ ontrialbegin = [
+	values.SS = 41;
+	values.LL = 75;
+	values.days = 20;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q23.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q23.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q24>
+/ ontrialbegin = [
+	values.SS = 54;
+	values.LL = 60;
+	values.days = 111;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q24.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q24.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q25>
+/ ontrialbegin = [
+	values.SS = 54;
+	values.LL = 80;
+	values.days = 30;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q25.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q25.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q26>
+/ ontrialbegin = [
+	values.SS = 22;
+	values.LL = 25;
+	values.days = 136;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q26.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q26.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q27>
+/ ontrialbegin = [
+	values.SS = 59.75;
+	values.LL = 60;
+	values.days = 109;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q27.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q27.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q28>
+/ ontrialbegin = [
+	values.SS = 34.50;
+	values.LL = 35;
+	values.days = 186;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q28.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q28.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q29>
+/ ontrialbegin = [
+	values.SS = 84;
+	values.LL = 85;
+	values.days = 150;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q29.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q29.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+<trial Q30>
+/ ontrialbegin = [
+	values.SS = 59.50;
+	values.LL = 60;
+	values.days = 108;
+]
+/ stimulusframes = [1=wouldyouprefer,LL,or,SS]
+/ validresponse = (LL,SS)
+/ ontrialend = [
+	if (trial.Q30.response=="SS"){
+		values.currenttotal=values.currenttotal+values.SS;
+		list.choices.appenditem(values.SS);
+		list.times.appenditem(values.zero);
+	} elseif (trial.Q30.response=="LL") {
+		values.currenttotal=values.currenttotal+values.LL;
+		list.choices.appenditem(values.LL);
+		list.times.appenditem(values.days);
+	}
+]
+</trial>
+
+
+
+
+
+
+<block questionairre>
+/ trials = [
+	1=questionairre1,questionairre2
+]
+</block>
+
+<trial questionairre1>
+/ stimulusframes = [1=whatdidyouthink,Boring,One,Two,Three,Four,Five,Six,Seven,Interesting]
+/ validresponse = (One,Two,Three,Four,Five,Six,Seven)
+</trial>
+
+
+<trial questionairre2>
+/ stimulusframes = [1=whatdidyouthink,Dull,One,Two,Three,Four,Five,Six,Seven,Exciting]
+/ validresponse = (One,Two,Three,Four,Five,Six,Seven)
+</trial>
+
+
+<trial listlists>
+/ ontrialbegin = [
+	values.timeslistitem = list.times.item(values.yindex);
+	values.choiceslistitem = list.choices.item(values.yindex);
+]
+/ trialduration = 0
+/ recorddata = true
+/ ontrialend = [
+	values.yindex = values.yindex + 1;
+]
+/ branch = [
+	if (values.yindex < 30) {
+		return trial.listlists;
+	} else {
+		return trial.endscreen;
+	}
+]
+
+</trial>
+
+<block endscreen>
+/ onblockbegin = [
+	values.yindex = 1;
+]
+
+/ trials = [
+	1=listlists
+]
+</block>
+
+
+<trial endscreen>
+/ ontrialbegin = [
+	values.randnum = round(rand(1,30));
+	values.paydate = list.times.item(values.randnum);
+	values.payment = list.choices.item(values.randnum);
+]
+
+/ stimulusframes = [
+	1=payment
+]
+/ timeout = 3000
+
+
+</trial>
+
+
+
+<expt main1>
+/ blocks = [
+	1=instructions;
+	2=questions;
+	3=questionairre; 
+	4=endscreen;
+]
+</expt>
+
+
+

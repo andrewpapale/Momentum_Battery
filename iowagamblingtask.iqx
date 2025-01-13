@@ -1,0 +1,655 @@
+﻿<usermanual>
+___________________________________________________________________________________________________________________	
+
+										IOWA GAMBLING TASK (IGT)
+___________________________________________________________________________________________________________________
+
+last updated: 03-04-2019 by K.Borchert (katjab@millisecond.com) for Millisecond Software LLC
+last updated:  10-07-2019 by K. Borchert (katjab@millisecond.com) for Millisecond Software, LLC
+
+Script Copyright © 10-07-2019 Millisecond Software
+
+___________________________________________________________________________________________________________________
+BACKGROUND INFO 	
+___________________________________________________________________________________________________________________
+This sample script implements the Iowa Gambling Task (IGT). The IGT task assesses risk learning 
+by utilizing rewards and punishment in an uncertain simulated real-life decision making context
+
+The implemented procedure is based on:
+
+Bechara A., Damasio A. R., Damasio H., Anderson S. W. (1994). 
+Insensitivity to future consequences following damage to human prefrontal cortex. Cognition, 50, 7-15 .
+
+___________________________________________________________________________________________________________________
+TASK DESCRIPTION	
+___________________________________________________________________________________________________________________
+Participant are presented 4 decks of cards and are asked to select a card from one of the 4 decks with their mouse. 
+By turning over the cards, participants can win money but also lose money.
+The four different decks can be categorized as advantageous (overall more wins than losses)
+or disadvantageous (overall more losses than wins).
+
+___________________________________________________________________________________________________________________	
+DURATION 
+___________________________________________________________________________________________________________________	
+the default set-up of the script takes appr. 5 minutes to complete
+
+__________________________________________________________________________________________________________________	
+DATA FILE INFORMATION 
+___________________________________________________________________________________________________________________ 
+The default data stored in the data files are:
+
+(1) Raw data file: 'iowagamblingtask_raw*.iqdat' (a separate file for each participant)
+
+build:						The specific Inquisit version used (the 'build') that was run
+computer.platform:			the platform the script was run on (win/mac/ios/android)
+date, time, 					date and time script was run 
+subject, group, 				with the current subject/groupnumber
+script.sessionid:				with the current session id
+
+values.deckOrderGroup:		the experimental deck group (1-4) the subject was randomly assigned to	
+									(refers to order of the advantageous (deck3, deck4) and disadvantegeous (deck 1, deck2)
+									decks on the screen)
+										group1: deck1(D), deck2(D), deck3(A), deck4(A)
+										group2: deck4(A), deck1(D), deck2(D), deck3(A)
+										group3: deck3(A), deck4(A), deck1(D), deck2(D)
+										group4: deck2(D), deck3(A), deck4(A), deck1(D)
+										
+blockcode, blocknum:			the name and number of the current block (built-in Inquisit variable)
+trialcode, trialnum: 			the name and number of the currently recorded trial (built-in Inquisit variable)
+									Note: trialnum is a built-in Inquisit variable; it counts all trials run; 
+									even those that do not store data to the data file such 
+									as feedback trials
+									
+values.cardsselected:			counts the number of card selections (across all blocks)
+
+values.card1itemnumber-
+values.card2itemnumber:		store the itemnumber of the card face that needs to be presented on screen for each of the 4 decks
+
+response:					the participant's response 
+									(e.g. which deck was chosen; the response "deck1" refers to the actual disadvantegous deck1
+									and not the position of the deck on the screen)
+									
+values.responseCategory:		"advantageous" vs. "disadvantageous"
+latency: 						the response latency
+values.gain:					stores the trial's gain depending on choice
+values.loss:					stores the trial's loss depending on choice
+values.currenttotal:			stores the current amount of coins won		
+					
+
+(2) Summary data file: 'iowagamblingtask_summary*.iqdat' (a separate file for each participant)
+
+computer.platform:			the platform the script was run on (win/mac/ios/android)
+script.startdate:				date script was run
+script.starttime:				time script was started
+script.subjectid:				assigned subject id number
+script.groupid:				assigned group id number
+script.sessionid:				assigned session id number
+script.elapsedtime:			time it took to run script (in ms); measured from onset to offset of script
+script.completed:				0 = script was not completed (prematurely aborted); 
+							1 = script was completed (all conditions run)
+									
+values.deckOrderGroup:		the experimental deck group (1-4) the subject was randomly assigned to	
+									(refers to order of the advantageous (deck3, deck4) and disadvantegeous (deck 1, deck2)
+									decks on the screen)
+										group1: deck1(D), deck2(D), deck3(A), deck4(A)
+										group2: deck4(A), deck1(D), deck2(D), deck3(A)
+										group3: deck3(A), deck4(A), deck1(D), deck2(D)
+										group4: deck2(D), deck3(A), deck4(A), deck1(D)	
+		
+values.count_deck1select-
+values.count_deck4select:			count all the actual deck1-deck4 choices across all blocks
+
+expressions.prop_deck1select-
+expressions.prop_deck4selectt:		proportion of specific deck selections
+									Note: deck1 always refers to deck1 and not specific deck location
+									
+values.countAdvantage_total:		counts the total number of advantageous selections (deck 3 & deck 4)
+values.countDisAdvantage_total:	counts the total number of disadvantageous selections (deck 1 & deck 2)
+
+/NET:							difference btw. total number of advantageous and disadvantageous selections 
+								(positive NET -> overall more advantageous selections)
+
+per blocks of 20 trials:
+/countAdvantage1:			counts the number of advantageous selections (deck 3 & deck 4) during trials 1-20
+/countDisAdvantage1:			counts the number of disadvantageous selections (deck 1 & deck 2) during trials 1-20 
+/NET1:						difference btw. number of advantageous and disadvantageous selections during trials 1-20
+/countAdvantage2:			counts the number of advantageous selections (deck 3 & deck 4) during trials 21-40
+/countDisAdvantage2:			counts the number of disadvantageous selections (deck 1 & deck 2) during trials 21-40 
+/NET2:						difference btw. number of advantageous and disadvantageous selections during trials 21-40								
+/countAdvantage3:			counts the number of advantageous selections (deck 3 & deck 4) during trials 41-60
+/countDisAdvantage3:			counts the number of disadvantageous selections (deck 1 & deck 2) during trials 41-60 
+/NET3:						difference btw. number of advantageous and disadvantageous selections during trials 41-60								
+/countAdvantage4:			counts the number of advantageous selections (deck 3 & deck 4) during trials 61-80
+/countDisAdvantage4:			counts the number of disadvantageous selections (deck 1 & deck 2) during trials 61-80 
+/NET4:						difference btw. number of advantageous and disadvantageous selections during trials 61-80								
+
+___________________________________________________________________________________________________________________	
+EXPERIMENTAL SET-UP 
+___________________________________________________________________________________________________________________
+	
+* The game is set up to play 1 block of 100 trials
+* The four decks are randomly assigned a (permanent) screen location (assignment by randomly assigned values.deckOrderGroup). 
+regardless of actual screen presentation:
+deck1/deck2 = disadvantageous
+deck3/deck4 = advantageous
+* By default, in this script the win/loss probabilities assigned are aligned with the model of "once played, 
+cards are NOT returned to the deck" (therefore turning probabilities into actual frequencies over the course of 10 selections of each deck;
+see more info under section EXPRESSIONS)
+* the script collects performance data in blocks of 20 trials
+
+___________________________________________________________________________________________________________________
+STIMULI
+___________________________________________________________________________________________________________________
+provided by Millisecond Software - can be edited under section Editable Stimuli
+
+___________________________________________________________________________________________________________________	
+INSTRUCTIONS 
+___________________________________________________________________________________________________________________	
+provided by Millisecond Software - can be edited under section Editable Instructions
+
+___________________________________________________________________________________________________________________	
+EDITABLE CODE 
+___________________________________________________________________________________________________________________	
+check below for (relatively) easily editable parameters, stimuli, instructions etc. 
+Keep in mind that you can use this script as a template and therefore always "mess" with the entire code 
+to further customize your experiment.
+
+The parameters you can change are:
+
+/ startamount:							the amount of money owned at the start of the game; startamount (default) = 2000
+/showcardinfo:							shows information about number of cards played/how many more to come
+
+</usermanual>
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EDITABLE PARAMETERS: change editable parameters here
+**************************************************************************************************************
+**************************************************************************************************************
+
+<parameters>
+/ startamount = 2000
+/ showcardinfo = true
+</parameters>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EDITABLE INSTRUCTIONS: change instructions here
+**************************************************************************************************************
+**************************************************************************************************************
+
+NOTE: instructions can be changed here:
+
+<item instructions>
+/ 1 = "In this task, you will be asked to repeatedly select a card from one of the four decks above. You can select a card by <%expressions.buttoninstruct1%>.
+
+With each card, you can win some money, but you can also lose some. Some decks will be more profitable than others. Try to choose cards from the most profitable decks so that your total winnings will be as high as possible. 
+
+You will get <% block.igt.trialscount%> chances to select a card from the deck that you think will give you the highest winnings. Your total earnings and the number of cards selected will be displayed on screen. 
+
+You start with $<%values.currenttotal%>. <%expressions.buttoninstruct2%> ~"Start~" to begin."
+/ 2 = "Select a card."
+</item>
+
+<text cardsselected>
+/ items = ("Cards selected: <% values.cardsselected %> of <% block.igt.trialscount%>")
+/ position = (50%, 10%)
+/ fontstyle = ("Arial", 2%)
+/ erase = false
+</text>
+
+<text start>
+/ items = ("Start")
+/ position = (50%, 90%)
+/ fontstyle = ("Arial", 3%, false, false, true, false, 5, 0)
+/ txcolor = blue
+</text>
+
+<text continue>
+/ items = ("Continue")
+/ position = (50%, 65%)
+/ fontstyle = ("Arial", 3%, false, false, true, false, 5, 0)
+/ txcolor = blue
+</text>
+
+<text gain>
+/ items = ("You won $<% values.gain%>")
+/ position = (20%, 51%)
+/ valign = top
+/ txcolor = green
+</text>
+
+<text loss>
+/ items = ("You lost $<% values.loss%>")
+/ position = (20%, 55%)
+/ valign = top
+/ txcolor = red
+</text>
+
+<text previoustotal>
+/ items = ("   Previous total: $<% values.previoustotal %>   ")
+/ position = (50%, 18%)
+/ erase = false
+</text>
+
+<text currenttotal>
+/ items = ("   Current total: $<% values.currenttotal %>   ")
+/ position = (50%, 22%)
+/ erase = false
+</text>
+
+<text igt>
+/ items = ("Iowa Gambling Test")
+/ position = (50%, 10%)
+/ fontstyle = ("Arial", 4%)
+/ erase = false
+</text>
+
+<text deck1label>
+/ items = ("Deck 1")
+/ position = (20%,51%)
+/ valign = top
+/ erase = false
+</text>
+
+<text deck2label>
+/ items = ("Deck 2")
+/ position = (40%,51%)
+/ valign = top
+/ erase = false
+</text>
+
+<text deck3label>
+/ items = ("Deck 3")
+/ position = (60%,51%)
+/ valign = top
+/ erase = false
+</text>
+
+<text deck4label>
+/ items = ("Deck 4")
+/ position = (80%,51%)
+/ valign = top
+/ erase = false
+</text>
+
+****************************************************************************************************
+general instruction expressions: adjust the instruction text depending on device used to run script
+****************************************************************************************************
+<expressions>
+/ buttoninstruct1 = if (computer.touch && !computer.haskeyboard) {"tapping the card with your finger";} else {"clicking on it with your mouse";}
+/ buttoninstruct2 = if (computer.touch && !computer.haskeyboard) {"Press";} else {"Click";}
+</expressions>
+
+**************************************************************************************************************
+								!!!REMAINING CODE: Customize after careful consideration only!!!
+**************************************************************************************************************
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+	DEFAULTS
+**************************************************************************************************************
+**************************************************************************************************************
+script requires Inquisit 6.0.0.0 or higher
+
+<defaults>
+/ canvasaspectratio = (4,3)
+/ minimumversion = "6.0.0.0"
+/ inputdevice = mouse
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ txbgcolor = white
+/ txcolor = (0, 0, 0)
+</defaults>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	DATA
+**************************************************************************************************************
+**************************************************************************************************************
+
+Note: data file explanations under User Manual Information at the top
+
+********************
+raw data
+********************				
+
+<data>
+/ columns = (build, computer.platform, date, time, subject, group, script.sessionid, blockcode, blocknum, 
+trialcode, trialnum,
+values.deckOrderGroup, values.cardsselected, response, values.responseCategory, latency, 
+values.gain, values.loss, values.currenttotal)
+</data>
+
+********************
+summary data
+********************
+
+<summarydata>
+/ columns = (computer.platform, script.startdate, script.starttime, script.subjectid, script.groupid, script.sessionid, script.elapsedtime, 
+script.completed, 
+values.deckOrderGroup, values.currenttotal, 
+values.countAdvantage_total, values.countDisAdvantage_total, expressions.NET,
+values.countAdvantage1, values.countDisAdvantage1, expressions.NET1,
+values.countAdvantage2, values.countDisAdvantage2, expressions.NET2,
+values.countAdvantage3, values.countDisAdvantage3, expressions.NET3,
+values.countAdvantage4, values.countDisAdvantage4, expressions.NET4,
+values.countAdvantage5, values.countDisAdvantage5, expressions.NET5)
+</summarydata>
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+	VALUES: automatically updated
+**************************************************************************************************************
+**************************************************************************************************************
+                                    
+previoustotal:							the previous amount of money owned
+cardselected:							adds the number of cards selected
+gain:										stores the trial's gain depending on choice
+loss:										stores the trial's loss depending on choice
+groupnumber:							the groupnumber (1-4) the subject was randomly assigned to		
+currenttotal:							the money currently won			
+responseCategory:						"advantageous" vs. "disadvantageous"
+/countAdvantage:						counts the number of advantageous selections (deck 1 & deck 2)
+/countDisAdvantage:						counts the number of disadvantageous selections (deck 3 & deck 4)
+
+<values>
+/ previoustotal = 0
+/ cardsselected = 0
+/ gain = 0
+/ loss = 0
+/ deckOrderGroup = 0
+/ currenttotal = 0
+/ responseCategory = ""
+/ countAdvantage1 = 0
+/ countDisAdvantage1 = 0
+/ countAdvantage2 = 0
+/ countDisAdvantage2 = 0
+/ countAdvantage3 = 0
+/ countDisAdvantage3 = 0
+/ countAdvantage4 = 0
+/ countDisAdvantage4 = 0
+/ countAdvantage5 = 0
+/ countDisAdvantage5 = 0
+/ countAdvantage_total = 0
+/ countDisAdvantage_total = 0
+</values>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EXPRESSIONS
+**************************************************************************************************************
+**************************************************************************************************************
+/ getlossdeck1 - 
+/ getlossdeck4:				calculates the current loss for a played deck
+							losses are selected randomly without replacement 
+							=> across 10 trials per deck, you will see the following losses:
+							
+deck1/deck2 = overall disadvantageous
+deck3/deck4 = overall advantageous
+
+<expressions>
+/ getlossdeck1 = noreplace(0, 0, 0, 0, 0, 150, 200, 250, 300, 350)
+/ getlossdeck2 = noreplace(0, 0, 0, 0, 0, 0, 0, 0, 0, 1250)
+/ getlossdeck3 = noreplace(0, 0, 0, 0, 0, 50, 50, 50, 50, 50)
+/ getlossdeck4 = noreplace(0, 0, 0, 0, 0, 0, 0, 0, 0, 250)
+
+/ NET = values.countAdvantage_total - values.countDisAdvantage_total
+/ NET1 = values.countAdvantage1 - values.countDisAdvantage1
+/ NET2 = values.countAdvantage2 - values.countDisAdvantage2
+/ NET3 = values.countAdvantage3 - values.countDisAdvantage3
+/ NET4 = values.countAdvantage4 - values.countDisAdvantage4
+/ NET5 = values.countAdvantage5 - values.countDisAdvantage5
+</expressions>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	INSTRUCTIONS
+**************************************************************************************************************
+**************************************************************************************************************
+
+<text igtinstructions>
+/ items = instructions
+/ select = 1
+/ position = (50%, 60%)
+/ fontstyle = ("Arial", 1.75%)
+/ size = (80%, 30%)
+/ hjustify = left
+/ valign = top
+</text>
+
+<trial instructions>
+/ stimulusframes = [1=igt, deck1, deck2, deck3, deck4, deck1label, deck2label, deck3label, deck4label, igtinstructions, start]
+/ validresponse = (start)
+/ recorddata = false
+</trial>
+
+<block instructions>
+/ trials = [1=instructions]
+</block>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	STIMULI
+**************************************************************************************************************
+**************************************************************************************************************
+
+<text selectinstructions>
+/ items = instructions
+/ select = 2
+/ position = (50%, 65%)
+</text>
+
+<picture deck1>
+/ items = ("deck.jpg")
+/ position = (20%, 50%)
+/ valign = bottom
+/ erase = false
+/ size = (20%, 20%)
+</picture>
+
+<picture deck2>
+/ items = ("deck.jpg")
+/ position = (40%, 50%)
+/ valign = bottom
+/ erase = false
+/ size = (20%, 20%)
+</picture>
+
+<picture deck3>
+/ items = ("deck.jpg")
+/ position = (60%, 50%)
+/ valign = bottom
+/ erase = false
+/ size = (20%, 20%)
+</picture>
+
+<picture deck4>
+/ items = ("deck.jpg")
+/ position = (80%, 50%)
+/ valign = bottom
+/ erase = false
+/ size = (20%, 20%)
+</picture>
+
+<picture deckon>
+/ items = ("deckon.jpg")
+/ erase = false
+</picture>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	TRIALS 	
+**************************************************************************************************************
+**************************************************************************************************************
+
+<trial igt>
+/ ontrialbegin = [
+	picture.deck1.item.1 = "deck.jpg";
+	picture.deck2.item.1 = "deck.jpg";
+	picture.deck3.item.1 = "deck.jpg";
+	picture.deck4.item.1 = "deck.jpg";
+]
+/ stimulusframes = [1=deck1, deck2, deck3, deck4, deck1label, deck2label, deck3label, deck4label, selectinstructions]
+/ validresponse = (deck1, deck2, deck3, deck4)
+
+/ ontrialend = [
+	values.cardsselected += 1;
+	
+	if (trial.igt.response == "deck1") {
+		picture.deck1.item.1 = "deckon.jpg";
+		text.gain.hposition=picture.deck1.hposition;
+		text.loss.hposition=picture.deck1.hposition;
+		values.gain=100;
+		values.loss=expressions.getlossdeck1;
+		values.previoustotal=values.currenttotal;
+		values.currenttotal = values.currenttotal+values.gain-values.loss;
+		values.responseCategory="disadvantageous";
+		values.countDisadvantage_total += 1;
+		if (trial.igt.trialcount <= 20) {
+			values.countDisAdvantage1 += 1;
+		} else if (trial.igt.trialcount <= 40) {
+			values.countDisAdvantage2 += 1;
+		} else if (trial.igt.trialcount <= 60) {
+			values.countDisAdvantage3 += 1;
+		} else if (trial.igt.trialcount <= 80) {
+			values.countDisAdvantage4 += 1;
+		} else {
+			values.countDisAdvantage5 += 1;
+		};
+	} else if (trial.igt.response == "deck2") {
+		picture.deck2.item.1 = "deckon.jpg";
+		text.gain.hposition=picture.deck2.hposition;
+		text.loss.hposition=picture.deck2.hposition;
+		values.gain=100;
+		values.loss=expressions.getlossdeck2;
+		values.previoustotal=values.currenttotal;
+		values.currenttotal = values.currenttotal+values.gain-values.loss;
+		values.responseCategory="disadvantageous";
+		values.countDisadvantage_total += 1;
+		if (trial.igt.trialcount <= 20) {
+			values.countDisAdvantage1 += 1;
+		} else if (trial.igt.trialcount <= 40) {
+			values.countDisAdvantage2 += 1;
+		} else if (trial.igt.trialcount <= 60) {
+			values.countDisAdvantage3 += 1;
+		} else if (trial.igt.trialcount <= 80) {
+			values.countDisAdvantage4 += 1;
+		} else {
+			values.countDisAdvantage5 += 1;
+		};
+	} else if (trial.igt.response == "deck3") {
+		picture.deck3.item.1 = "deckon.jpg";
+		text.gain.hposition=picture.deck3.hposition;
+		text.loss.hposition=picture.deck3.hposition;
+		values.gain=50;
+		values.loss=expressions.getlossdeck3;
+		values.previoustotal=values.currenttotal;
+		values.currenttotal = values.currenttotal+values.gain-values.loss;
+		values.responseCategory="advantageous";
+		values.countAdvantage_total += 1;
+		if (trial.igt.trialcount <= 20) {
+			values.countAdvantage1 += 1;
+		} else if (trial.igt.trialcount <= 40) {
+			values.countAdvantage2 += 1;
+		} else if (trial.igt.trialcount <= 60) {
+			values.countAdvantage3 += 1;
+		} else if (trial.igt.trialcount <= 80) {
+			values.countAdvantage4 += 1;
+		} else {
+			values.countAdvantage5 += 1;
+		};
+	} else if (trial.igt.response == "deck4") {
+		picture.deck4.item.1 = "deckon.jpg";
+		text.gain.hposition=picture.deck4.hposition;
+		text.loss.hposition=picture.deck4.hposition;
+		values.gain=50;
+		values.loss=expressions.getlossdeck4;
+		values.previoustotal=values.currenttotal;
+		values.currenttotal = values.currenttotal+values.gain-values.loss;
+		values.responseCategory="advantageous";
+		values.countAdvantage_total += 1;
+		if (trial.igt.trialcount <= 20) {
+			values.countAdvantage1 += 1;
+		} else if (trial.igt.trialcount <= 40) {
+			values.countAdvantage2 += 1;
+		} else if (trial.igt.trialcount <= 60) {
+			values.countAdvantage3 += 1;
+		} else if (trial.igt.trialcount <= 80) {
+			values.countAdvantage4 += 1;
+		} else {
+			values.countAdvantage5 += 1;
+		};
+	};
+]
+/ branch = [
+	if (true){
+		return trial.igtfeedback;
+	};
+]
+</trial>
+
+<trial igtfeedback>
+/ stimulusframes = [1=deck1, deck2, deck3, deck4, gain, loss, previoustotal, currenttotal, cardsselected, continue]
+/ validresponse = (continue)
+/ recorddata = false
+</trial>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	BLOCKS
+**************************************************************************************************************
+**************************************************************************************************************
+
+<block igt>
+/ onblockbegin = [
+	if ( values.deckOrderGroup == 1) {
+		picture.deck1.hposition = 20%;
+		picture.deck2.hposition = 40%;
+		picture.deck3.hposition = 60%;
+		picture.deck4.hposition = 80%;
+	} else if ( values.deckOrderGroup == 2) {
+		picture.deck1.hposition = 40%;
+		picture.deck2.hposition = 80%;
+		picture.deck3.hposition = 20%;
+		picture.deck4.hposition = 60%;
+	} else if ( values.deckOrderGroup == 3) {
+		picture.deck1.hposition = 80%;
+		picture.deck2.hposition = 60%;
+		picture.deck3.hposition = 40%;
+		picture.deck4.hposition = 20%;
+	} else if ( values.deckOrderGroup == 4) {
+		picture.deck1.hposition = 60%;
+		picture.deck2.hposition = 20%;
+		picture.deck3.hposition = 80%;
+		picture.deck4.hposition = 40%;
+	};
+]
+/ trials = [1-100 = igt]
+</block>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EXPERIMENT 
+**************************************************************************************************************
+**************************************************************************************************************
+
+<expt main>
+/ onexptbegin = [
+	values.deckOrderGroup = random(1, 2, 3, 4);
+	if (parameters.showcardinfo == false) {
+		text.cardsselected.textcolor = white;
+	};
+	values.currenttotal = parameters.startamount;
+]
+/ blocks = [
+	1=instructions; 
+	2=igt;
+]
+</expt>
+
+**************************************************************************************************************
+												End of File
+**************************************************************************************************************

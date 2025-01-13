@@ -1,0 +1,2717 @@
+﻿<usermanual>
+___________________________________________________________________________________________________________________	
+
+					COLOR MULTI SOURCE INTERFERENCE TASK (cMSIT) - (with multi-colored items, fixed order, digit target)
+___________________________________________________________________________________________________________________	
+
+This script was generously provided by Mario Wenzel, Thomas Kubiak and Tamlin Conner to be shared via Millisecond
+Software's Script Library. Thank you!
+
+last updated:  12-17-2019 by K. Borchert (katjab@millisecond.com) for Millisecond Software, LLC
+
+___________________________________________________________________________________________________________________
+BACKGROUND INFO 	
+___________________________________________________________________________________________________________________
+This script implements a Color Multi Source Interference Task (cMSIT). The MSIT was originally designed by Bush et al (1998)
+as a behavioral fMRI task to assess the functional integrity of the ACC subdivision in selected neuropsychiatric
+disorders. According to Bush et al the MSIT combines multiple dimensions of cognitive interference 
+such as flanker, and Stroop interference.
+
+The implemented procedure in this script with red/green stimuli and a fixed order
+of stimuli is similar to the procedure described in:
+
+Wenzel, M., Kubiak, T., & Conner, T. S. (2013). Positive affect and self-control: Attention to self-control 
+demands mediates the influence of positive affect on consecutive self-control. Cognition and Emotion.
+http://dx.doi.org/10.1080/02699931.2013.851069
+
+original MSIT:
+Bush, G., Shin, L.M., Holmes, J., Rosen, B.R., & Vogt, B.A. (2003). The Multi-Source Interference
+Task: Validation study with fMRI in individual subjects. Molecular Psychiatry, 8, 60–70.
+
+___________________________________________________________________________________________________________________
+TASK DESCRIPTION	
+___________________________________________________________________________________________________________________
+Participants are presented stimuli consisting of 3 digits (1, 2, 3s) (or 1 digit and 2 X's = controls), e.g. 221
+Two of the digits are the same digit (=distractors, e.g. 22) but one is different (= Target, 1). The target also differs
+in size (either smaller or bigger) from the distractors. In addition, one of the digits (distractors or target)
+has a different color. If the target is different in color the trial is COLOR congruent. If one of the distractors
+is different in color the trial is COLOR INcongruent. Participants are asked to press a response button (1, 2, 3) 
+as fast as possible to report which digit was the target.
+
+
+___________________________________________________________________________________________________________________	
+DURATION 
+___________________________________________________________________________________________________________________	
+the default set-up of the script takes appr. 8 minutes to complete
+
+___________________________________________________________________________________________________________________	
+DATA FILE INFORMATION 
+___________________________________________________________________________________________________________________	
+The default data stored in the data files are:
+
+(1) Raw data file: 'msit_color_fixed_raw*.iqdat' (a separate file for each participant)
+
+build:								The specific Inquisit version used (the 'build') that was run
+computer.platform:				the platform the script was run on (win/mac/ios/android)
+date, time, 						date and time script was run 
+subject, group, 					with the current subject/groupnumber
+script.sessionid:					with the current session id
+
+blockcode, blocknum:			the name and number of the current block (built-in Inquisit variable)
+trialcode, trialnum: 				the name and number of the currently recorded trial (built-in Inquisit variable)
+										Note: trialnum is a built-in Inquisit variable; it counts all trials run; even those
+										that do not store data to the data file such as feedback trials. Thus, trialnum 
+										may not reflect the number of main trials run per block.
+										
+values.colorcongruency:		congruent = target digit is the one different in color
+									control congruent = control target, target digit is the one different in color
+									incongruent = target digit is NOT the one different in color
+
+stimulusitem.1-
+stimulusitem.2:					the presented stimuli in order of trial presentation
+
+response:							the participant's response (scancode of response key)
+										2,79 => 1
+										3, 80 => 2
+										4, 81 => 3
+										
+correct:							the correctness of the response (1 = correct; 0 = otherwise)
+latency: 							the response latency (measured from onset of stimulus, in ms)
+
+(2) Summary data file: ''msit_color_fixed_summary*.iqdat' (a separate file for each participant)
+
+computer.platform:				the platform the script was run on (win/mac/ios/android)
+script.startdate:					date script was run
+script.starttime:					time script was started
+script.subjectid:					assigned subject id number
+script.groupid:					assigned group id number
+script.sessionid:					assigned session id number
+script.elapsedtime:				time it took to run script (in ms); measured from onset to offset of script
+script.completed:				0 = script was not completed (prematurely aborted); 
+									1 = script was completed (all conditions run)
+									
+expressions.propcorrect:		proportion correct overall
+expressions.meanRT:				mean latency (in ms) of all correct responses
+expressions.Std:					standard deviation of all correct latencies
+expressions.medianRT:			median latency (in ms) of all correct responses
+
+________________________________________________________________________________________________________	
+EXPERIMENTAL SET-UP 
+___________________________________________________________________________________________________________________
+- This script runs 150 trials (6 controls, 48 color congruent, 96 color incongruent) in a fixed order.
+- response buttons: 1, 2, 3 on keyboard and/or numeric pad
+
+Trial Sequence:
+- fixation cross for 500ms
+- stimulus presented for 2000ms
+- accuracy feedback 500ms after response or stimulus timeout 
+
+___________________________________________________________________________________________________________________
+STIMULI
+___________________________________________________________________________________________________________________
+all stimuli are provided by Mario Wenzel, Thomas Kubiak and Tamlin Conner
+
+control (target always printed larger and different in color; target position always congruent with response button position): 6 
+	=> 2 color x 1 possible target fontsize x 1 possible identity of flanking letters x 3 target digits x 1 possible positions of target digit x 1 possible position of colored digit
+color congruent (target differs in color; NO congruence of target position with response button position): 48 
+	=> 2 colors x 2 possible target fontsizes x 2 possible identities of flanking numbers x 3 target digits x 2 possible positions of target digit x 1 possible position of colored digit
+color incongruent (target does NOT differ in color; NO congruence of target position with response button position): 96
+	=> 2 colors x 2 fontsizes x 2 identities of flanking numbers x 3 target digits x 2 possible positions of target digit x 2 possible positions of colored digit
+
+___________________________________________________________________________________________________________________	
+INSTRUCTIONS 
+___________________________________________________________________________________________________________________
+instructions are provided by Mario Wenzel, Thomas Kubiak and Tamlin Conner
+and can be edited under EDITABLE CODE -> Editable Instructions
+
+___________________________________________________________________________________________________________________	
+EDITABLE CODE 
+___________________________________________________________________________________________________________________	
+check below for (relatively) easily editable parameters, stimuli, instructions etc. 
+Keep in mind that you can use this script as a template and therefore always "mess" with the entire code 
+to further customize your experiment.
+
+</usermanual>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EDITABLE INSTRUCTIONS: change instructions here
+**************************************************************************************************************
+**************************************************************************************************************
+<item Color_instructions1>
+/1= "Welcome to the cMSIT Task!
+
+For most trials, you will be shown three numbers.  Two numbers are repeated and
+one is unique.  This unique number is the target number.  In other trials, you will be shown
+one number and two 'x' es.  Again, the unique number is the target number."
+
+/2 = "Press the number key on your keyboard/touchpad as fast as possible to indicate the identity (not the position)
+of the target number.  For example, if you see '221', you would press the '1' key.
+
+The target number can vary in size (bigger or smaller than the others) or can vary in color
+(same or different than the others).  No matter the size or color, the target will always be the unique number."
+</item>
+
+
+<item Color_instructions2>
+/1 = "You´ve finished the experiment. Thank you for your participation."
+</item>
+
+<text right>
+/items = ("correct")
+/ color = white
+/ fontstyle = ("Arial", 10%, true, false, false, false, 5, 0)
+/ vjustify = center
+/ hjustify = center
+</text>
+
+<text incorrect>
+/items = ("incorrect")
+/ color = white
+/ fontstyle = ("Arial", 10%, true, false, false, false, 5, 0)
+/ vjustify = center
+/ hjustify = center
+</text>
+
+*******************************
+General Helper Instructions
+******************************
+
+<text getReady>
+/items = ("Get Ready:
+~n<%expressions.buttoninstruct1%>")
+/ fontstyle = ("Arial", 3.00%, false, false, false, false, 5, 1)
+/ size = (80%, 40%)
+</text>
+
+****************************************************************************************************
+general instruction expressions: adjust the instruction text depending on device used to run script
+****************************************************************************************************
+<expressions>
+/buttoninstruct1 = if (computer.touch && !computer.haskeyboard) {"Position your fingers over the '1', '2', and '3' response buttons";} else {"Put your fingers on the '1', '2' and '3' buttons of your keyboard.";}
+</expressions>
+
+**************************************************************************************************************
+								!!!REMAINING CODE: Customize after careful consideration only!!!
+**************************************************************************************************************
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+	DEFAULTS
+**************************************************************************************************************
+**************************************************************************************************************
+script requires Inquisit 6.0.0.0 or higher
+
+<defaults>
+/minimumversion = "6.0.0.0"
+/ screencolor = black
+/ fontstyle = ("Arial", 5%, true, false, false, false, 5, 0)
+/ txbgcolor = black
+/ txcolor = white
+/ inputdevice = keyboard
+/ canvassize=(100%, 100%)
+/ canvasaspectratio=(15, 12)
+</defaults>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	DATA
+**************************************************************************************************************
+**************************************************************************************************************
+
+Note: data file explanations under User Manual Information at the top
+
+********************
+raw data
+********************
+
+<data>
+/ columns = (build, computer.platform, computer.touch, date, time, subject, group, script.sessionid, blockcode, blocknum, 
+trialcode, trialnum,
+values.colorcongruency, 
+stimulusitem, stimulusitem, response, correct, latency)
+</data>
+
+********************
+summary data
+********************
+
+<summarydata>
+/ columns = (computer.platform, script.startdate, script.starttime, script.subjectid, script.groupid, script.sessionid, script.elapsedtime, 
+script.completed
+expressions.propcorrect, expressions.meanRT, expressions.Std, expressions.medianRT)
+</summarydata>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	VALUES: automatically updated
+*******************************************************************************************************************
+*******************************************************************************************************************
+/colorcongruency:					congruent = target digit is the one different in color
+									control congruent = control target, target digit is the one different in color
+									incongruent = target digit is NOT the one different in color
+									
+
+<values>
+/colorcongruency = 0
+</values>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	EXPRESSIONS
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+/propcorrect:		proportion correct overall
+/meanRT:			mean latency (in ms) of all correct responses
+/Std:				standard deviation of all correct latencies
+/medianRT:			median latency (in ms) of all correct responses
+
+<expressions>
+/propcorrect = list.responses.mean
+/meanRT = list.RT.mean
+/Std = list.RT.standarddeviation
+/medianRT = list.RT.median
+</expressions>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	INSTRUCTIONS
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+<text Color_instructions1>
+/ items = Color_instructions1
+/ position = (50%, 50%)
+/ size = (80%, 80%)
+/ vjustify = center
+/ hjustify = left
+/ select = sequence
+/ resetinterval = 0
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 238)
+</text>
+
+<text Color_instructions2>
+/ items = Color_instructions2
+/ position = (50%, 50%)
+/ size = (80%, 80%)
+/ vjustify = center
+/ hjustify = left
+/ select = sequence
+/ resetinterval = 0
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 238)
+</text>
+
+<trial Color_instructions1>
+/ stimulusframes = [1=Color_instructions1]
+/ validresponse = (" ")
+/ recorddata = false
+</trial>
+
+<trial Color_instructions2>
+/ stimulusframes = [1=Color_instructions2]
+/ validresponse = (" ")
+/ recorddata = false
+</trial>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	STIMULI: *** TEXTS AND TARGETS IN COLOR *****
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+********************************************************
+Controls: 1 digit
+- position of target congruent with response button position
+- target differs in size
+- target differs in color
+********************************************************
+
+<picture ccxx3_3cl_GGR_R>
+/ items = ("ccxx3_3cl_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture ccxx3_3cl_RRG_G>
+/ items = ("ccxx3_3cl_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture ccx2x_2cl_GRG_R>
+/ items = ("ccx2x_2cl_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture ccx2x_2cl_RGR_G>
+/ items = ("ccx2x_2cl_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture cc1xx_1cl_RGG_R>
+/ items = ("cc1xx_1cl_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture cc1xx_1cl_GRR_G>
+/ items = ("cc1xx_1cl_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+********************************************************
+con = the target is also different in color
+inc = the target is not different in color (a distractor is)
+
+Note: none of the target positions are congruent with response
+key position
+********************************************************
+
+<picture con212_1cl_GRG_R>
+/ items = ("con212_1cl_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con212_1cl_RGR_G>
+/ items = ("con212_1cl_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc212_1il_GGR_R>
+/ items = ("inc212_1il_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc212_1il_GRR_G>
+/ items = ("inc212_1il_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc212_1il_RGG_R>
+/ items = ("inc212_1il_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc212_1il_RRG_G>
+/ items = ("inc212_1il_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con221_1cl_GGR_R>
+/ items = ("con221_1cl_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+
+<picture con221_1cl_RRG_G>
+/ items = ("con221_1cl_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc221_1il_GRG_R>
+/ items = ("inc221_1il_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc221_1il_GRR_G>
+/ items = ("inc221_1il_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc221_1il_RGR_G>
+/ items = ("inc221_1il_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con313_1cl_GRG_R>
+/ items = ("con313_1cl_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con313_1cl_RGR_G>
+/ items = ("con313_1cl_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc313_1il_GGR_R>
+/ items = ("inc313_1il_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc313_1il_GRR_G>
+/ items = ("inc313_1il_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc313_1il_RGG_R>
+/ items = ("inc313_1il_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc313_1il_RRG_G>
+/ items = ("inc313_1il_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con331_1cl_GGR_R>
+/ items = ("con331_1cl_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con331_1cl_RRG_G>
+/ items = ("con331_1cl_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc331_1il_GRG_R>
+/ items = ("inc331_1il_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc331_1il_GRR_G>
+/ items = ("inc331_1il_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc331_1il_RGG_R>
+/ items = ("inc331_1il_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc331_1il_RGR_G>
+/ items = ("inc331_1il_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc331_1is_RGR_G>
+/ items = ("inc331_1is_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc331_1is_RGG_R>
+/ items = ("inc331_1is_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc331_1is_GRR_G>
+/ items = ("inc331_1is_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc331_1is_GRG_R>
+/ items = ("inc331_1is_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con331_1cs_RRG_G>
+/ items = ("con331_1cs_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con331_1cs_GGR_R>
+/ items = ("con331_1cs_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc313_1is_RRG_G>
+/ items = ("inc313_1is_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc313_1is_RGG_R>
+/ items = ("inc313_1is_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc313_1is_GRR_G>
+/ items = ("inc313_1is_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc313_1is_GGR_R>
+/ items = ("inc313_1is_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con313_1cs_RGR_G>
+/ items = ("con313_1cs_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con313_1cs_GRG_R>
+/ items = ("con313_1cs_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc221_1is_RGR_G>
+/ items = ("inc221_1is_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc221_1il_RGG_R>
+/ items = ("inc221_1il_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc221_1is_RGG_R>
+/ items = ("inc221_1is_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc221_1is_GRR_G>
+/ items = ("inc221_1is_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc221_1is_GRG_R>
+/ items = ("inc221_1is_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con221_1cs_RRG_G>
+/ items = ("con221_1cs_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con221_1cs_GGR_R>
+/ items = ("con221_1cs_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc212_1is_RRG_G>
+/ items = ("inc212_1is_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc212_1is_RGG_R>
+/ items = ("inc212_1is_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc212_1is_GRR_G>
+/ items = ("inc212_1is_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc212_1is_GGR_R>
+/ items = ("inc212_1is_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con212_1cs_RGR_G>
+/ items = ("con212_1cs_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con212_1cs_GRG_R>
+/ items = ("con212_1cs_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con112_2cl_GGR_R>
+/ items = ("con112_2cl_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con112_2cl_RRG_G>
+/ items = ("con112_2cl_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc112_2il_GRG_R>
+/ items = ("inc112_2il_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc112_2il_GRR_G>
+/ items = ("inc112_2il_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc112_2il_RGG_R>
+/ items = ("inc112_2il_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc112_2il_RGR_G>
+/ items = ("inc112_2il_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con211_2cl_GRR_G>
+/ items = ("con211_2cl_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con211_2cl_RGG_R>
+/ items = ("con211_2cl_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+
+<picture inc211_2il_GGR_R>
+/ items = ("inc211_2il_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+
+<picture inc211_2il_GRG_R>
+/ items = ("inc211_2il_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc211_2il_RGR_G>
+/ items = ("inc211_2il_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc211_2il_RRG_G>
+/ items = ("inc211_2il_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con233_2cl_GRR_G>
+/ items = ("con233_2cl_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con233_2cl_RGG_R>
+/ items = ("con233_2cl_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc233_2il_GGR_R>
+/ items = ("inc233_2il_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc233_2il_GRG_R>
+/ items = ("inc233_2il_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc233_2il_RRG_G>
+/ items = ("inc233_2il_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc233_2il_RGR_G>
+/ items = ("inc233_2il_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc332_2il_RGR_G>
+/ items = ("inc332_2il_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc332_2il_RGG_R>
+/ items = ("inc332_2il_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc332_2il_GRR_G>
+/ items = ("inc332_2il_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc332_2il_GRG_R>
+/ items = ("inc332_2il_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con332_2cl_RRG_G>
+/ items = ("con332_2cl_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con332_2cl_GGR_R>
+/ items = ("con332_2cl_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc332_2is_RGR_G>
+/ items = ("inc332_2is_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc332_2is_RGG_R>
+/ items = ("inc332_2is_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc332_2is_GRR_G>
+/ items = ("inc332_2is_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc332_2is_GRG_R>
+/ items = ("inc332_2is_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con332_2cs_RRG_G>
+/ items = ("con332_2cs_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con332_2cs_GGR_R>
+/ items = ("con332_2cs_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc233_2is_RRG_G>
+/ items = ("inc233_2is_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc233_2is_RGR_G>
+/ items = ("inc233_2is_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc233_2is_GRG_R>
+/ items = ("inc233_2is_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc233_2is_GGR_R>
+/ items = ("inc233_2is_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con233_2cs_RGG_R>
+/ items = ("con233_2cs_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con233_2cs_GRR_G>
+/ items = ("con233_2cs_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc211_2is_RRG_G>
+/ items = ("inc211_2is_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc211_2is_RGR_G>
+/ items = ("inc211_2is_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc211_2is_GRG_R>
+/ items = ("inc211_2is_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc211_2is_GGR_R>
+/ items = ("inc211_2is_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con211_2cs_RGG_R>
+/ items = ("con211_2cs_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con211_2cs_GRR_G>
+/ items = ("con211_2cs_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc112_2is_RGR_G>
+/ items = ("inc112_2is_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc112_2is_RGG_R>
+/ items = ("inc112_2is_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc112_2is_GRR_G>
+/ items = ("inc112_2is_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc112_2is_GRG_R>
+/ items = ("inc112_2is_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con112_2cs_RRG_G>
+/ items = ("con112_2cs_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con112_2cs_GGR_R>
+/ items = ("con112_2cs_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con131_3cl_GRG_R>
+/ items = ("con131_3cl_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con131_3cl_RGR_G>
+/ items = ("con131_3cl_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc131_3il_GGR_R>
+/ items = ("inc131_3il_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc131_3il_GRR_G>
+/ items = ("inc131_3il_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc131_3il_RGG_R>
+/ items = ("inc131_3il_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc131_3il_RRG_G>
+/ items = ("inc131_3il_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con232_3cl_GRG_R>
+/ items = ("con232_3cl_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con232_3cl_RGR_G>
+/ items = ("con232_3cl_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc232_3il_GGR_R>
+/ items = ("inc232_3il_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc232_3il_GRR_G>
+/ items = ("inc232_3il_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc232_3il_RGG_R>
+/ items = ("inc232_3il_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc232_3il_RRG_G>
+/ items = ("inc232_3il_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con322_3cl_GRR_G>
+/ items = ("con322_3cl_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con322_3cl_RGG_R>
+/ items = ("con322_3cl_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc322_3il_GGR_R>
+/ items = ("inc322_3il_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc322_3il_GRG_R>
+/ items = ("inc322_3il_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc322_3il_RGR_G>
+/ items = ("inc322_3il_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc322_3il_RRG_G>
+/ items = ("inc322_3il_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con311_3cl_GRR_G>
+/ items = ("con311_3cl_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con311_3cl_RGG_R>
+/ items = ("con311_3cl_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc311_3il_GGR_R>
+/ items = ("inc311_3il_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc311_3il_GRG_R>
+/ items = ("inc311_3il_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc311_3il_RGR_G>
+/ items = ("inc311_3il_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc311_3il_RRG_G>
+/ items = ("inc311_3il_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con131_3cs_GRG_R>
+/ items = ("con131_3cs_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con131_3cs_RGR_G>
+/ items = ("con131_3cs_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc131_3is_GGR_R>
+/ items = ("inc131_3is_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc131_3is_GRR_G>
+/ items = ("inc131_3is_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc131_3is_RGG_R>
+/ items = ("inc131_3is_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc131_3is_RRG_G>
+/ items = ("inc131_3is_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con232_3cs_GRG_R>
+/ items = ("con232_3cs_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con232_3cs_RGR_G>
+/ items = ("con232_3cs_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc232_3is_GGR_R>
+/ items = ("inc232_3is_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc232_3is_GRR_G>
+/ items = ("inc232_3is_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc232_3is_RGG_R>
+/ items = ("inc232_3is_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc232_3is_RRG_G>
+/ items = ("inc232_3is_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con311_3cs_GRR_G>
+/ items = ("con311_3cs_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con311_3cs_RGG_R>
+/ items = ("con311_3cs_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc311_3is_GGR_R>
+/ items = ("inc311_3is_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc311_3is_GRG_R>
+/ items = ("inc311_3is_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc311_3is_RGR_G>
+/ items = ("inc311_3is_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc311_3is_RRG_G>
+/ items = ("inc311_3is_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con322_3cs_GRR_G>
+/ items = ("con322_3cs_GRR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture con322_3cs_RGG_R>
+/ items = ("con322_3cs_RGG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc322_3is_GGR_R>
+/ items = ("inc322_3is_GGR_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc322_3is_GRG_R>
+/ items = ("inc322_3is_GRG_R.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc322_3is_RGR_G>
+/ items = ("inc322_3is_RGR_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+<picture inc322_3is_RRG_G>
+/ items = ("inc322_3is_RRG_G.JPG")
+/ size = (100%, 100%)
+</picture>
+
+*********************************************
+Miscellaneous Stimuli
+*********************************************
+<item fixation>
+/1 = "plus.jpg"
+</item>
+
+<picture fixation>
+/ items = fixation
+/ size = (100%, 100%)
+</picture>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	LISTS
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+Note: the following lists store data
+
+stores accuracy data for each trial run: 1 = correct; 0 = incorrect
+<list responses>
+</list>
+
+stores latency data for each correct trial run: 1 = correct; 0 = incorrect
+<list RT>
+</list>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	TRIALS
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+<trial  con112_2cl_GGR_R> 
+/ontrialbegin = [
+	values.colorcongruency = "congruent";
+]
+/ stimulustimes = [0=fixation; 500= con112_2cl_GGR_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con112_2cl_RRG_G> 
+/ontrialbegin = [
+	values.colorcongruency = "congruent";
+]
+/ stimulustimes = [0=fixation; 500= con112_2cl_RRG_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc112_2il_GRG_R>
+/ontrialbegin = [
+	values.colorcongruency = "incongruent";
+]
+/ stimulustimes = [0=fixation; 500= inc112_2il_GRG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc112_2il_GRR_G>
+/ontrialbegin = [
+	values.colorcongruency = "incongruent";
+]
+/ stimulustimes = [0=fixation; 500= inc112_2il_GRR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc112_2il_RGG_R>
+/ontrialbegin = [
+	values.colorcongruency = "incongruent";
+]
+/ stimulustimes = [0=fixation; 500= inc112_2il_RGG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc112_2il_RGR_G>
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ontrialbegin = [
+	values.colorcongruency = "incongruent";
+]
+/ stimulustimes = [0=fixation; 500= inc112_2il_RGR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con131_3cl_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con131_3cl_GRG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con131_3cl_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con131_3cl_RGR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc131_3il_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc131_3il_GGR_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc131_3il_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc131_3il_GRR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc131_3il_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc131_3il_RGG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc131_3il_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc131_3il_RRG_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con211_2cl_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con211_2cl_GRR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con211_2cl_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con211_2cl_RGG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc211_2il_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc211_2il_GGR_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc211_2il_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc211_2il_GRG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc211_2il_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc211_2il_RGR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc211_2il_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc211_2il_RRG_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con212_1cl_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con212_1cl_GRG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con212_1cl_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con212_1cl_RGR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc212_1il_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc212_1il_GGR_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc212_1il_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc212_1il_GRR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc212_1il_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc212_1il_RGG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc212_1il_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc212_1il_RRG_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con221_1cl_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con221_1cl_GGR_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con221_1cl_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con221_1cl_RRG_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc221_1il_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc221_1il_GRG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc221_1il_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc221_1il_GRR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc221_1il_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc221_1il_RGR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc221_1il_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc221_1il_RGG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con232_3cl_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con232_3cl_GRG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con232_3cl_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con232_3cl_RGR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc232_3il_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc232_3il_GRR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc232_3il_RGG_R>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc232_3il_RGG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc232_3il_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc232_3il_RRG_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc232_3il_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc232_3il_GGR_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con233_2cl_GRR_G>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con233_2cl_GRR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con233_2cl_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con233_2cl_RGG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc233_2il_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc233_2il_GGR_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc233_2il_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc233_2il_GRG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc233_2il_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc233_2il_RGR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc233_2il_RRG_G>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc233_2il_RRG_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc233_2il_GRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc233_2il_GRG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con311_3cl_GRR_G>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con311_3cl_GRR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con311_3cl_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con311_3cl_RGG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc311_3il_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc311_3il_GGR_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc311_3il_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc311_3il_GRG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc311_3il_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc311_3il_RGR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc311_3il_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc311_3il_RRG_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con313_1cl_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con313_1cl_GRG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con313_1cl_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con313_1cl_RGR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc313_1il_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc313_1il_GGR_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc313_1il_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc313_1il_GRR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc313_1il_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc313_1il_RGG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc313_1il_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc313_1il_RRG_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con312_3cl_GRR_G>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con322_3cl_GRR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con322_3cl_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con322_3cl_RGG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con322_3cl_GRR_G>
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con322_3cl_GRR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc322_3il_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc322_3il_GGR_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc322_3il_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc322_3il_GRG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc322_3il_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc322_3il_RGR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc322_3il_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc322_3il_RRG_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con331_1cl_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con331_1cl_GGR_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con331_1cl_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con331_1cl_RRG_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc331_1il_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc331_1il_GRG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc331_1il_GRR_G>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc331_1il_GRR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc331_1il_RGG_R>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc331_1il_RGG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc331_1il_RGR_G>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc331_1il_RGR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con332_2cl_GGR_R>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con332_2cl_GGR_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con332_2cl_RRG_G>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con332_2cl_RRG_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc332_2il_GRG_R>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc332_2il_GRG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc332_2il_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc332_2il_GRR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc332_2il_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc332_2il_RGG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc332_2il_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc332_2il_RGR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con112_2cs_GGR_R>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con112_2cs_GGR_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con112_2cs_RRG_G>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con112_2cs_RRG_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc112_2is_GRG_R>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc112_2is_GRG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc112_2is_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc112_2is_GRR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc112_2is_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc112_2is_RGG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc112_2is_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc112_2is_RGR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con131_3cs_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con131_3cs_GRG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con131_3cs_RGR_G>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con131_3cs_RGR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc131_3is_GGR_R>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc131_3is_GGR_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc131_3is_GRR_G>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc131_3is_GRR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc131_3is_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc131_3is_RGG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc131_3is_RRG_G>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc131_3is_RRG_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con211_2cs_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con211_2cs_GRR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con211_2cs_RGG_R>
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con211_2cs_RGG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc211_2is_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc211_2is_GGR_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc211_2is_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc211_2is_GRG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc211_2is_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc211_2is_RGR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc211_2is_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc211_2is_RRG_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con212_1cs_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con212_1cs_GRG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con212_1cs_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con212_1cs_RGR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc212_1is_GGR_R>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc212_1is_GGR_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc212_1is_GRR_G>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc212_1is_GRR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc212_1is_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc212_1is_RGG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc212_1is_RRG_G>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc212_1is_RRG_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+
+<trial  con221_1cs_GGR_R>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con221_1cs_GGR_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con221_1cs_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con221_1cs_RRG_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc221_1is_GRG_R>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc221_1is_GRG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc221_1is_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc221_1is_GRR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc221_1is_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc221_1is_RGG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc221_1is_RGR_G>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc221_1is_RGR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con232_3cs_GRG_R>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con232_3cs_GRG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc232_3is_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc232_3is_GGR_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc232_3is_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc232_3is_GRR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc232_3is_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc232_3is_RGG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc232_3is_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc232_3is_RRG_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con232_3cs_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con232_3cs_RGR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con233_2cs_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con233_2cs_GRR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con233_2cs_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con233_2cs_RGG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc233_2is_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc233_2is_GGR_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc233_2is_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc233_2is_GRG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc233_2is_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc233_2is_RGR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc233_2is_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc233_2is_RRG_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con311_3cs_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con311_3cs_GRR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con311_3cs_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con311_3cs_RGG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc311_3is_GGR_R>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc311_3is_GGR_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc311_3is_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc311_3is_GRG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc311_3is_RGR_G>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc311_3is_RGR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc311_3is_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc311_3is_RRG_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con313_1cs_GRG_R>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con313_1cs_GRG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con313_1cs_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con313_1cs_RGR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc313_1is_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc313_1is_GGR_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc313_1is_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc313_1is_GRR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc313_1is_RGG_R>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc313_1is_RGG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc313_1is_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc313_1is_RRG_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con322_3cs_GRR_G>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con322_3cs_GRR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con322_3cs_RGG_R>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500=con322_3cs_RGG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc322_3is_GGR_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc322_3is_GGR_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc322_3is_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc322_3is_GRG_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc322_3is_RGR_G>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc322_3is_RGR_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc322_3is_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc322_3is_RRG_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con331_1cs_GGR_R>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con331_1cs_GGR_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con331_1cs_RRG_G> 
+/ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con331_1cs_RRG_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc331_1is_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500=  inc331_1is_GRG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc331_1is_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500=inc331_1is_GRR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+
+<trial  inc331_1is_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc331_1is_RGG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc331_1is_RGR_G>
+ /ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc331_1is_RGR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con332_2cs_GGR_R>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con332_2cs_GGR_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  con332_2cs_RRG_G>
+ /ontrialbegin = [values.colorcongruency = "congruent"]
+/ stimulustimes = [0=fixation; 500= con332_2cs_RRG_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc332_2is_GRG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500=inc332_2is_GRG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc332_2is_GRR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc332_2is_GRR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc332_2is_RGG_R> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500= inc332_2is_RGG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial  inc332_2is_RGR_G> 
+/ontrialbegin = [values.colorcongruency = "incongruent"]
+/ stimulustimes = [0=fixation; 500=inc332_2is_RGR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial xx3G> 
+/ontrialbegin = [values.colorcongruency = "control congruent"]
+/ stimulustimes = [0=fixation; 500=ccxx3_3cl_RRG_G]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial xx3R> 
+/ontrialbegin = [values.colorcongruency = "control congruent"]
+/ stimulustimes = [0=fixation; 500=ccxx3_3cl_GGR_R]
+/ correctresponse = ("3")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial x2xG> 
+/ontrialbegin = [values.colorcongruency = "control congruent"]
+/ stimulustimes = [0=fixation; 500=ccx2x_2cl_RGR_G]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial x2xR> 
+/ontrialbegin = [values.colorcongruency = "control congruent"]
+/ stimulustimes = [0=fixation; 500=ccx2x_2cl_GRG_R]
+/ correctresponse = ("2")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial 1xxG>
+ /ontrialbegin = [values.colorcongruency = "control congruent"]
+/ stimulustimes = [0=fixation; 500=cc1xx_1cl_GRR_G]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+<trial 1xxR>
+ /ontrialbegin = [values.colorcongruency = "control congruent"]
+/ stimulustimes = [0=fixation; 500=cc1xx_1cl_RGG_R]
+/ correctresponse = ("1")
+/ validresponse = ("1", "2", "3")
+/responsetime = 500
+/ response = timeout(2000)
+</trial>
+
+*****************************
+General Helper Trial
+*****************************
+
+<trial getReady>
+/ stimulusframes = [1 = getReady]
+/ trialduration = 5000
+/ validresponse = ("1", "2", "3")
+/ beginresponsetime = 5000
+/ errormessage = false
+</trial>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	BLOCKS
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+<block instructions>
+/trials = [
+	1-2 = Color_instructions1; 
+	3 = getReady;
+]
+</block>
+
+
+calls 150 trials in fixed order
+<block MSIT_Color>
+/trials= [1= inc112_2is_GRR_G;
+2= inc221_1is_RGR_G;
+3= con212_1cl_GRG_R;
+4= con311_3cs_GRR_G;
+5= inc211_2il_GGR_R; 
+6= inc313_1is_RGG_R;
+7= inc131_3is_GRR_G;
+8= con131_3cl_RGR_G;
+9= con233_2cl_GRR_G; 
+10= inc212_1il_RGG_R;
+11= con211_2cl_RGG_R;
+12= inc212_1is_GGR_R; 
+13= inc332_2is_GRG_R;
+14= con221_1cs_RRG_G;
+15= 1xxR;
+16= inc331_1il_GRR_G;
+17= inc313_1il_GRR_G;
+18= inc112_2is_GRG_R;
+19= con322_3cl_RGG_R;
+20= con221_1cs_GGR_R;
+21= inc131_3is_RRG_G;
+22= inc211_2il_GRG_R;
+23= con131_3cl_GRG_R;
+24= con211_2cs_GRR_G; 
+25= inc322_3is_RGR_G; 
+26= con211_2cs_RGG_R;
+27= con313_1cl_GRG_R;
+28= x2xG;
+29= inc232_3il_RGG_R;
+30= con311_3cs_RGG_R;
+31= con221_1cl_GGR_R;
+32= inc212_1il_RRG_G;
+33= con311_3cl_RGG_R;
+34= con232_3cl_RGR_G; 
+35= inc313_1is_GGR_R;  
+36= con212_1cs_GRG_R; 
+37= inc112_2is_RGG_R; 
+38= inc221_1il_RGG_R;
+39= inc131_3il_RRG_G;
+40= xx3G;
+41= con232_3cs_GRG_R;
+42= con332_2cs_GGR_R;
+43= inc313_1is_GRR_G;
+44= con232_3cl_GRG_R;
+45= con221_1cl_RRG_G;
+46= con311_3cl_GRR_G;
+47= inc112_2il_RGG_R;
+48= con112_2cs_RRG_G;
+49= con211_2cl_GRR_G;
+50= con233_2cs_RGG_R;
+51= inc233_2is_RRG_G;
+52= inc131_3is_RGG_R;
+53= inc232_3is_GGR_R;
+54= con332_2cl_RRG_G;
+55= inc211_2is_RGR_G;
+56= inc131_3il_RGG_R;
+57= con313_1cs_RGR_G;
+58= inc322_3il_RGR_G;
+59= x2xR;
+60= con331_1cl_GGR_R;
+61= inc331_1il_RGR_G;
+62= con112_2cl_GGR_R;
+63= inc212_1is_RRG_G;
+64= inc233_2is_RGR_G;
+65= inc331_1il_GRG_R;
+66= con322_3cs_GRR_G;
+67= inc332_2is_RGR_G;
+68= con331_1cl_RRG_G;
+69= con112_2cs_GGR_R;
+70= inc331_1is_RGG_R;
+71= con112_2cl_RRG_G;
+72= con322_3cs_RGG_R;
+73= inc221_1is_RGG_R;
+74= con332_2cs_RRG_G;
+75= inc311_3is_GRG_R;
+76= inc131_3il_GGR_R;
+77= con212_1cl_RGR_G;
+78= inc313_1il_RGG_R;
+79= inc212_1il_GGR_R;
+80= con313_1cl_RGR_G;
+81= inc112_2il_RGR_G;
+82= inc211_2il_RRG_G;
+83= inc112_2il_GRG_R;
+84= con322_3cl_GRR_G;
+85= inc233_2is_GRG_R;
+86= con313_1cs_GRG_R;
+87= inc332_2is_GRR_G;
+88= inc311_3il_GGR_R;
+89= inc311_3is_GGR_R;
+90= inc211_2il_RGR_G;
+91= con212_1cs_RGR_G;
+92= inc221_1il_GRG_R;
+93= inc212_1il_GRR_G;
+94= inc211_2is_GGR_R;
+95= con233_2cs_GRR_G;
+96= inc322_3is_RRG_G;
+97= inc313_1il_GGR_R;
+98= inc311_3is_RGR_G;
+99= con232_3cs_RGR_G;
+100= inc221_1il_GRR_G;
+101= xx3R;
+102= con233_2cl_RGG_R;
+103= inc313_1is_RRG_G;
+104= inc331_1il_RGG_R;
+105= inc233_2is_GGR_R;
+106= inc332_2il_GRG_R;
+107= inc233_2il_GRG_R;
+108= con131_3cs_GRG_R;
+109= inc232_3is_GRR_G;
+110= inc311_3il_GRG_R;
+111= inc311_3is_RRG_G;
+112= inc233_2il_RRG_G;
+113= inc212_1is_RGG_R;
+114= inc322_3il_GRG_R;
+115= inc232_3is_RRG_G;
+116= inc212_1is_GRR_G;
+117= inc221_1is_GRG_R;
+118= inc233_2il_RGR_G;
+119= 1xxG;
+120= inc112_2il_GRR_G;
+121= inc322_3is_GRG_R;
+122= con131_3cs_RGR_G;
+123= inc221_1is_GRR_G;
+124= inc131_3is_GGR_R;
+125= inc322_3il_RRG_G;
+126= inc211_2is_RRG_G;
+127= con331_1cs_GGR_R;
+128= inc313_1il_RRG_G;
+129= inc332_2il_RGR_G;
+130= inc221_1il_RGR_G;
+131= inc311_3il_RGR_G;
+132= inc322_3il_GGR_R;
+133= inc233_2il_GGR_R;
+134= inc332_2il_RGG_R;
+135= inc331_1is_RGR_G;
+136= con332_2cl_GGR_R;
+137= inc331_1is_GRG_R;
+138= inc232_3is_RGG_R;
+139= inc332_2il_GRR_G;
+140= inc112_2is_RGR_G;
+141= inc232_3il_RRG_G;
+142= con331_1cs_RRG_G;
+143= inc331_1is_GRR_G;
+144= inc311_3il_RRG_G;
+145= inc211_2is_GRG_R;
+146= inc131_3il_GRR_G;
+147= inc232_3il_GRR_G;
+148= inc332_2is_RGG_R;
+149= inc232_3il_GGR_R;
+150= inc322_3is_GGR_R]
+/errormessage = (incorrect, 500)
+/correctmessage = (right, 500)
+/ ontrialend = [
+	list.responses.appenditem(block.MSIT_Color.correct);
+	if (block.MSIT_Color.correct){
+		list.RT.appenditem(block.MSIT_Color.latency);
+	};
+]
+</block>
+
+<block End>
+/trials = [1= Color_instructions2]
+</block>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	EXPERIMENT
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+<expt MSIT_Color>
+/ blocks = [
+	1=instructions; 
+	2=MSIT_Color; 
+	3=End;
+]
+</expt>
+
+*******************************************************************************************************************
+												End of File
+*******************************************************************************************************************
